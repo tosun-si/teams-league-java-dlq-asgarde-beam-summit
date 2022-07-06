@@ -8,7 +8,7 @@ mvn compile exec:java \
   -Dexec.args=" \
   --project=emea-c1-dwh-dev \
   --runner=DataflowRunner \
-  --jobName=team-league-job-$(date +'%Y-%m-%d-%H-%M-%S') \
+  --jobName=team-league-java-job-$(date +'%Y-%m-%d-%H-%M-%S') \
   --region=europe-west1 \
   --streaming=false \
   --zone=europe-west1-d \
@@ -16,6 +16,12 @@ mvn compile exec:java \
   --gcpTempLocation=gs://mazlum_dev/dataflow/temp \
   --stagingLocation=gs://mazlum_dev/dataflow/staging \
   --serviceAccount=922164338802-compute@developer.gserviceaccount.com \
+  --teamLeagueDataset=mazlum_test \
+  --teamStatsTable=team_stat \
+  --jobType=team_league_java_ingestion_job \
+  --failureOutputDataset=mazlum_test \
+  --failureOutputTable=job_failure \
+  --failureFeatureName=team_league \
   " \
   -Pdataflow-runner
 ```

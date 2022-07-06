@@ -1,4 +1,4 @@
-package fr.groupbees.infrastructure.io.inmemory;
+package fr.groupbees.infrastructure.io.mock;
 
 import fr.groupbees.domain.TeamScorerRaw;
 import fr.groupbees.domain.TeamStatsRaw;
@@ -11,10 +11,10 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
-public class TeamStatsInMemoryReadTransform extends PTransform<PBegin, PCollection<TeamStatsRaw>> {
+public class TeamStatsMockReadTransform extends PTransform<PBegin, PCollection<TeamStatsRaw>> {
 
     @Inject
-    public TeamStatsInMemoryReadTransform() {
+    public TeamStatsMockReadTransform() {
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TeamStatsInMemoryReadTransform extends PTransform<PBegin, PCollecti
 
 
         final List<TeamStatsRaw> teamStats = Arrays.asList(
-                new TeamStatsRaw("PSG", 30, psgScorers),
+                new TeamStatsRaw("", 30, psgScorers),
                 new TeamStatsRaw("Real", 25, realScorers)
         );
 

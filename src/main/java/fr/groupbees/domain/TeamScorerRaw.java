@@ -1,16 +1,15 @@
 package fr.groupbees.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Builder
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
+@Data
 @EqualsAndHashCode
+@ToString
 public class TeamScorerRaw implements Serializable {
 
     private String scorerFirstName;

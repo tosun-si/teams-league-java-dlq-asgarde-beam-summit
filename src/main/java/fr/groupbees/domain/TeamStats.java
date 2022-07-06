@@ -1,16 +1,15 @@
 package fr.groupbees.domain;
 
 import com.google.common.collect.ImmutableMap;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.*;
 
 @Builder(toBuilder = true)
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @EqualsAndHashCode
 @ToString
 public class TeamStats implements Serializable {
@@ -40,7 +39,7 @@ public class TeamStats implements Serializable {
                 .topScorerFirstName(topScorer.getScorerFirstName())
                 .topScorerLastName(topScorer.getScorerLastName())
                 .topScorerGoalsNumber(topScorer.getGoalsNumber())
-                .topScorerGoalsNumber(topScorer.getGamesNumber())
+                .topScorerGamesNumber(topScorer.getGamesNumber())
                 .totalScoreNumber(totalScoreTeam)
                 .build();
 
@@ -51,12 +50,12 @@ public class TeamStats implements Serializable {
                 .build();
     }
 
-    public static TeamStats addSloganToStats(final TeamStats teamStats) {
+    public TeamStats addSloganToStats() {
         final String slogan = Optional
-                .ofNullable(TEAM_SLOGANS.get(teamStats.getTeamName()))
-                .orElseThrow(() -> new IllegalArgumentException("No slogan for team : " + teamStats.getTeamName()));
+                .ofNullable(TEAM_SLOGANS.get(teamName))
+                .orElseThrow(() -> new IllegalArgumentException("No slogan for team : " + teamName));
 
-        return teamStats
+        return this
                 .toBuilder()
                 .teamSlogan(slogan)
                 .build();

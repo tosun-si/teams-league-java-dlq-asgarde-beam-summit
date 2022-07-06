@@ -1,14 +1,13 @@
 package fr.groupbees.domain;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Builder
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @EqualsAndHashCode
 @ToString
 public class TeamScoreStats implements Serializable {

@@ -1,11 +1,18 @@
 package fr.groupbees.domain_transform;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import fr.groupbees.asgarde.Failure;
 import fr.groupbees.domain.TeamStats;
 import fr.groupbees.domain.TeamStatsRaw;
-import fr.groupbees.infrastructure.io.inmemory.TeamStatsInMemoryIOAdapter;
+import fr.groupbees.domain.exception.TeamStatsRawValidatorException;
+import fr.groupbees.infrastructure.io.jsonfile.JsonUtil;
+import lombok.val;
+import org.apache.beam.sdk.testing.PAssert;
 import org.apache.beam.sdk.testing.TestPipeline;
 import org.apache.beam.sdk.testing.ValidatesRunner;
+import org.apache.beam.sdk.transforms.Create;
 import org.apache.beam.sdk.transforms.MapElements;
+import org.apache.beam.sdk.transforms.WithFailures.Result;
 import org.apache.beam.sdk.values.PCollection;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,34 +21,122 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.Serializable;
+import java.util.List;
 
-import static org.apache.beam.sdk.values.TypeDescriptor.of;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.beam.sdk.values.TypeDescriptors.strings;
 
-/**
- * Tests of WordCount.
- */
 @RunWith(JUnit4.class)
 public class TeamStatsTransformTest implements Serializable {
+
+    private static final int PSG_SCORE = 30;
 
     @Rule
     public transient TestPipeline p = TestPipeline.create();
 
     @Test
     @Category(ValidatesRunner.class)
-    public void testCountWords() {
-        PCollection<TeamStatsRaw> input = p.apply("Read team stats Raw", new TeamStatsInMemoryIOAdapter().read());
+    public void givenInputTeamsStatsRawWithoutErrorWhenTransformToStatsDomainThenExpectedOutputInResult() {
+        // Given.
+        val referenceTeamStatRaw = new TypeReference<List<TeamStatsRaw>>() {
+        };
+        final List<TeamStatsRaw> inputTeamsStatsRaw = JsonUtil.deserializeFromResourcePath(
+                "files/input/domain/transform/input_teams_stats_raw_without_error.json",
+                referenceTeamStatRaw
+        );
 
-        PCollection<TeamStats> output = input
-                .apply("Transform to team stats", new TeamStatsTransform())
+        PCollection<TeamStatsRaw> input = p.apply("Read team stats Raw", Create.of(inputTeamsStatsRaw));
+
+        // When.
+        Result<PCollection<TeamStats>, Failure> resultTransform = input
+                .apply("Transform to team stats", new TeamStatsTransform());
+
+        PCollection<String> output = resultTransform
                 .output()
-                .apply("Log team stats", MapElements.into(of(TeamStats.class)).via(this::logTeamStats));
+                .apply("Map to Json String", MapElements.into(strings()).via(JsonUtil::serialize))
+                .apply("Log Output team stats", MapElements.into(strings()).via(this::logStringElement));
 
-//        PAssert.that(output).containsInAnyOrder(COUNTS_ARRAY);
+        val referenceTeamStat = new TypeReference<List<TeamStats>>() {
+        };
+        final List<String> expectedTeamsStats = JsonUtil.deserializeFromResourcePath(
+                        "files/expected/domain/transform/expected_teams_stats_without_error.json",
+                        referenceTeamStat)
+                .stream()
+                .map(JsonUtil::serialize)
+                .collect(toList());
+
+        // Then.
+        PAssert.that(output).containsInAnyOrder(expectedTeamsStats);
+        PAssert.that(resultTransform.failures()).empty();
+
         p.run().waitUntilFinish();
     }
 
-    private TeamStats logTeamStats(final TeamStats teamStats) {
-        System.out.println(teamStats);
-        return teamStats;
+    @Test
+    @Category(ValidatesRunner.class)
+    public void givenInputTeamsStatsRawWithOneErrorAndOneGoodInputWhenTransformToStatsDomainThenOneExpectedFailureAndOneGoodOutput() {
+        // Given.
+        val referenceTeamStatRaw = new TypeReference<List<TeamStatsRaw>>() {
+        };
+        final List<TeamStatsRaw> inputTeamsStatsRaw = JsonUtil.deserializeFromResourcePath(
+                "files/input/domain/transform/input_teams_stats_raw_with_one_error_one_good_output.json",
+                referenceTeamStatRaw
+        );
+
+        PCollection<TeamStatsRaw> input = p.apply("Read team stats Raw", Create.of(inputTeamsStatsRaw));
+
+        // When.
+        Result<PCollection<TeamStats>, Failure> resultTransform = input
+                .apply("Transform to team stats", new TeamStatsTransform());
+
+        PCollection<String> output = resultTransform
+                .output()
+                .apply("Map to Json String", MapElements.into(strings()).via(JsonUtil::serialize))
+                .apply("Log Output team stats", MapElements.into(strings()).via(this::logStringElement));
+
+        val referenceTeamStat = new TypeReference<List<TeamStats>>() {
+        };
+        final List<String> expectedTeamsStats = JsonUtil.deserializeFromResourcePath(
+                        "files/expected/domain/transform/expected_teams_stats_with_one_error_one_good_output.json",
+                        referenceTeamStat)
+                .stream()
+                .map(JsonUtil::serialize)
+                .collect(toList());
+
+        final TeamStatsRaw teamStatsRawWithErrorField = inputTeamsStatsRaw
+                .stream()
+                .filter(t -> t.getTeamScore() == PSG_SCORE)
+                .findFirst()
+                .get();
+
+        final String expectedFailure = Failure.from(
+                "Validate fields",
+                teamStatsRawWithErrorField,
+                new TeamStatsRawValidatorException(TeamStatsRaw.TEAM_EMPTY_ERROR_MESSAGE)
+        ).toString();
+
+        PCollection<String> resultFailuresAsString = resultTransform.failures()
+                .apply("Failure as string", MapElements.into(strings()).via(Failure::toString))
+                .apply("Log Failure", MapElements.into(strings()).via(this::logStringElement));
+
+        // Then.
+        PAssert.that(output).containsInAnyOrder(expectedTeamsStats);
+        PAssert.that(resultFailuresAsString).containsInAnyOrder(singletonList(expectedFailure));
+
+        p.run().waitUntilFinish();
+    }
+
+    private String logStringElement(final String element) {
+        System.out.println(element);
+        return element;
+    }
+
+    private <T> List<T> deserialize(final String filePath) {
+        return JsonUtil.deserializeFromResourcePath(
+                filePath,
+                new TypeReference<List<T>>() {
+                }
+        );
     }
 }

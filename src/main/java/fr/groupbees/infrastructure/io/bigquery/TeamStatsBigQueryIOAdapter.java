@@ -22,7 +22,7 @@ public class TeamStatsBigQueryIOAdapter implements TeamStatsDatabaseIOConnector 
     public BigQueryIO.Write<TeamStats> write() {
         return BigQueryIO.<TeamStats>write()
                 .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
-                .to(options.getOutputDataset() + "." + options.getOutputTable())
+                .to(options.getTeamLeagueDataset() + "." + options.getTeamStatsTable())
                 .withFormatFunction(TeamStatsBigQueryIOAdapter::toTeamStatsTableRow)
                 .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_NEVER)
                 .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND);
