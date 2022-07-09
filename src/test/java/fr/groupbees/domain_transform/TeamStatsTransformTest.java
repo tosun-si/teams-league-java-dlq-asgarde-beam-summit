@@ -131,12 +131,4 @@ public class TeamStatsTransformTest implements Serializable {
         System.out.println(element);
         return element;
     }
-
-    private <T> List<T> deserialize(final String filePath) {
-        return JsonUtil.deserializeFromResourcePath(
-                filePath,
-                new TypeReference<List<T>>() {
-                }
-        );
-    }
 }
