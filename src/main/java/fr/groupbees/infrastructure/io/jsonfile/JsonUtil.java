@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public class JsonUtil {
 
@@ -39,10 +40,34 @@ public class JsonUtil {
         return deserializeToList(stream, reference);
     }
 
+    public static <T, R> Map<T, R> deserializeMapFromResourcePath(String resourcePath, TypeReference<Map<T, R>> reference) {
+        final InputStream stream = JsonUtil.class
+                .getClassLoader()
+                .getResourceAsStream(resourcePath);
+
+        return deserializeToMap(stream, reference);
+    }
+
     public static <T> List<T> deserializeToList(String json, TypeReference<List<T>> reference) {
         try {
             return OBJECT_MAPPER.readValue(json, reference);
         } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Error Json deserialization");
+        }
+    }
+
+    public static <T, R> Map<T, R> deserializeToMap(String json, TypeReference<Map<T, R>> reference) {
+        try {
+            return OBJECT_MAPPER.readValue(json, reference);
+        } catch (IOException e) {
+            throw new IllegalStateException("Error Json deserialization");
+        }
+    }
+
+    public static <T, R> Map<T, R> deserializeToMap(InputStream stream, TypeReference<Map<T, R>> reference) {
+        try {
+            return OBJECT_MAPPER.readValue(stream, reference);
+        } catch (IOException e) {
             throw new IllegalStateException("Error Json deserialization");
         }
     }

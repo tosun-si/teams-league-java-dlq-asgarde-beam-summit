@@ -64,9 +64,9 @@ public class TeamStats implements Serializable {
                 .build();
     }
 
-    public TeamStats addSloganToStats() {
+    public TeamStats addSloganToStats(final Map<String, String> allSlogans) {
         final String slogan = Optional
-                .ofNullable(TEAM_SLOGANS.get(teamName))
+                .ofNullable(allSlogans.get(teamName))
                 .orElseThrow(() -> new IllegalArgumentException("No slogan for team : " + teamName));
 
         return this

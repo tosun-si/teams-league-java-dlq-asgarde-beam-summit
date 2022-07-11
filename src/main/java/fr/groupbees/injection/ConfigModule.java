@@ -3,10 +3,21 @@ package fr.groupbees.injection;
 import dagger.Module;
 import dagger.Provides;
 import fr.groupbees.application.TeamLeagueOptions;
-import fr.groupbees.domain.FailureConf;
+import fr.groupbees.infrastructure.io.FailureConf;
+import fr.groupbees.infrastructure.io.PipelineConf;
 
 @Module
 class ConfigModule {
+
+    @Provides
+    static PipelineConf providePipelineConf(TeamLeagueOptions options) {
+        return PipelineConf
+                .builder()
+                .inputJsonFile(options.getInputJsonFile())
+                .teamLeagueDataset(options.getTeamLeagueDataset())
+                .teamStatsTable(options.getTeamStatsTable())
+                .build();
+    }
 
     @Provides
     static FailureConf provideFailureConf(TeamLeagueOptions options) {

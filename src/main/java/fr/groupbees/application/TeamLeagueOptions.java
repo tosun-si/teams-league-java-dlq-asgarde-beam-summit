@@ -1,26 +1,18 @@
 package fr.groupbees.application;
 
-import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 
 public interface TeamLeagueOptions extends PipelineOptions {
+    @Description("Path of the input Json file to read from")
+    String getInputJsonFile();
 
-    @Description("Path of the file to read from")
-    String getInputFile();
+    void setInputJsonFile(String value);
 
-    void setInputFile(String value);
+    @Description("Path of the slogans file to read from")
+    String getInputFileSlogans();
 
-    @Description("File separator")
-    @Default.Character(',')
-    char getInputFileSeparator();
-
-    void setInputFileSeparator(char value);
-
-    @Description("Topic input subscription")
-    String getInputSubscription();
-
-    void setInputSubscription(String value);
+    void setInputFileSlogans(String value);
 
     @Description("Path of the file to write to")
     String getTeamLeagueDataset();

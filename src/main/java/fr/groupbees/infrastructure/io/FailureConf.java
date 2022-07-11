@@ -1,4 +1,4 @@
-package fr.groupbees.domain;
+package fr.groupbees.infrastructure.io;
 
 import lombok.Builder;
 import lombok.Getter;
