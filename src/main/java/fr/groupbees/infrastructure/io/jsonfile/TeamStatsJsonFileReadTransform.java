@@ -1,6 +1,7 @@
 package fr.groupbees.infrastructure.io.jsonfile;
 
 import fr.groupbees.domain.TeamStatsRaw;
+import fr.groupbees.domain_transform.JsonUtil;
 import fr.groupbees.infrastructure.io.PipelineConf;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.transforms.MapElements;

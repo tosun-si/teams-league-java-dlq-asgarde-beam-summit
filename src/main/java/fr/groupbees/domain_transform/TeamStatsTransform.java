@@ -6,7 +6,6 @@ import fr.groupbees.asgarde.Failure;
 import fr.groupbees.asgarde.transforms.MapProcessContextFn;
 import fr.groupbees.domain.TeamStats;
 import fr.groupbees.domain.TeamStatsRaw;
-import fr.groupbees.infrastructure.io.jsonfile.JsonUtil;
 import lombok.val;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.MapElements;

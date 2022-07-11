@@ -1,4 +1,4 @@
-package fr.groupbees.infrastructure.io.jsonfile;
+package fr.groupbees.domain_transform;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
