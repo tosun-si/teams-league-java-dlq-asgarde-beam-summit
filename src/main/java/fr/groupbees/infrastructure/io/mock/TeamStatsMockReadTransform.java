@@ -37,7 +37,7 @@ public class TeamStatsMockReadTransform extends PTransform<PBegin, PCollection<T
 
 
         final List<TeamStatsRaw> teamStats = Arrays.asList(
-                new TeamStatsRaw("PSG", 30, psgScorers),
+                new TeamStatsRaw("", 30, psgScorers),
                 new TeamStatsRaw("Real", 25, realScorers)
         );
 

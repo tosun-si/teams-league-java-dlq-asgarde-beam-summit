@@ -6,6 +6,7 @@ import fr.groupbees.infrastructure.io.PipelineConf;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.PBegin;
 import org.apache.beam.sdk.values.PCollection;
+import org.apache.beam.sdk.values.PCollectionView;
 
 import javax.inject.Inject;
 
@@ -19,7 +20,12 @@ public class TeamStatsJsonFileIOAdapter implements TeamStatsFileIOConnector {
     }
 
     @Override
-    public PTransform<PBegin, PCollection<TeamStatsRaw>> read() {
+    public PTransform<PBegin, PCollection<TeamStatsRaw>> read_team_stats() {
         return new TeamStatsJsonFileReadTransform(pipelineConf);
+    }
+
+    @Override
+    public PTransform<PBegin, PCollectionView<String>> read_team_slogans() {
+        return new TeamSloganJsonFileReadTransform(pipelineConf);
     }
 }

@@ -4,8 +4,6 @@ import fr.groupbees.asgarde.Failure;
 import fr.groupbees.domain.TeamStats;
 import fr.groupbees.domain_transform.*;
 import org.apache.beam.sdk.Pipeline;
-import org.apache.beam.sdk.io.TextIO;
-import org.apache.beam.sdk.transforms.View;
 import org.apache.beam.sdk.transforms.WithFailures.Result;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionView;
@@ -37,11 +35,8 @@ public class TeamLeaguePipelineComposer {
     }
 
     public Pipeline compose(final Pipeline pipeline) {
-        final TeamLeagueOptions options = pipeline.getOptions().as(TeamLeagueOptions.class);
-
         PCollectionView<String> slogansSideInput = pipeline
-                .apply("Read slogans", TextIO.read().from(options.getInputFileSlogans()))
-                .apply("Create as collection view", View.asSingleton());
+                .apply("Read slogans", fileIOConnector.read_team_slogans());
 
         Result<PCollection<TeamStats>, Failure> resultTeamStats = pipeline
                 .apply("Read team stats", inMemoryIOConnector.read())

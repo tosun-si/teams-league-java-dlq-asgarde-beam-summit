@@ -14,6 +14,7 @@ class ConfigModule {
         return PipelineConf
                 .builder()
                 .inputJsonFile(options.getInputJsonFile())
+                .inputFileSlogans(options.getInputFileSlogans())
                 .teamLeagueDataset(options.getTeamLeagueDataset())
                 .teamStatsTable(options.getTeamStatsTable())
                 .build();
