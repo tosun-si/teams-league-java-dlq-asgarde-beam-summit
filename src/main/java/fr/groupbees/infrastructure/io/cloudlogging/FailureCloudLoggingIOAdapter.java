@@ -1,7 +1,7 @@
 package fr.groupbees.infrastructure.io.cloudlogging;
 
 import fr.groupbees.asgarde.Failure;
-import fr.groupbees.domain_transform.FailureIOConnector;
+import fr.groupbees.domain_ptransform.FailureIOConnector;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.POutput;

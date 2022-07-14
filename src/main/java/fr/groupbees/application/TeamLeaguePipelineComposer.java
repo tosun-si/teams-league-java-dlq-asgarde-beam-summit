@@ -2,7 +2,7 @@ package fr.groupbees.application;
 
 import fr.groupbees.asgarde.Failure;
 import fr.groupbees.domain.TeamStats;
-import fr.groupbees.domain_transform.*;
+import fr.groupbees.domain_ptransform.*;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.transforms.WithFailures.Result;
 import org.apache.beam.sdk.values.PCollection;
@@ -11,7 +11,7 @@ import org.apache.beam.sdk.values.PCollectionView;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static fr.groupbees.domain_transform.FailureIOConnector.*;
+import static fr.groupbees.domain_ptransform.FailureIOConnector.*;
 
 public class TeamLeaguePipelineComposer {
 

@@ -3,7 +3,7 @@ package fr.groupbees.infrastructure.io.bigquery;
 import com.google.api.services.bigquery.model.TableRow;
 import fr.groupbees.asgarde.Failure;
 import fr.groupbees.infrastructure.io.FailureConf;
-import fr.groupbees.domain_transform.FailureIOConnector;
+import fr.groupbees.domain_ptransform.FailureIOConnector;
 import lombok.val;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.transforms.PTransform;

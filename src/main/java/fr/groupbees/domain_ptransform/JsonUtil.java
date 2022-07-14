@@ -1,4 +1,4 @@
-package fr.groupbees.domain_transform;
+package fr.groupbees.domain_ptransform;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

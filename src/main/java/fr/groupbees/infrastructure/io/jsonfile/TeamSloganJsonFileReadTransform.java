@@ -1,6 +1,6 @@
 package fr.groupbees.infrastructure.io.jsonfile;
 
-import fr.groupbees.infrastructure.io.PipelineConf;
+import fr.groupbees.application.PipelineConf;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.View;

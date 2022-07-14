@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import fr.groupbees.application.TeamLeagueOptions;
 import fr.groupbees.infrastructure.io.FailureConf;
-import fr.groupbees.infrastructure.io.PipelineConf;
+import fr.groupbees.application.PipelineConf;
 
 @Module
 class ConfigModule {

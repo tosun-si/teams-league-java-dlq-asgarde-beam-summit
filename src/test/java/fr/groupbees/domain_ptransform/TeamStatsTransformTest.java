@@ -1,4 +1,4 @@
-package fr.groupbees.domain_transform;
+package fr.groupbees.domain_ptransform;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import fr.groupbees.asgarde.Failure;
@@ -45,7 +45,7 @@ public class TeamStatsTransformTest implements Serializable {
         val referenceTeamStatRaw = new TypeReference<List<TeamStatsRaw>>() {
         };
         final List<TeamStatsRaw> inputTeamsStatsRaw = JsonUtil.deserializeFromResourcePath(
-                "files/input/domain/transform/input_teams_stats_raw_without_error.json",
+                "files/input/domain/ptransform/input_teams_stats_raw_without_error.json",
                 referenceTeamStatRaw
         );
 
@@ -63,7 +63,7 @@ public class TeamStatsTransformTest implements Serializable {
         val referenceTeamStat = new TypeReference<List<TeamStats>>() {
         };
         final List<String> expectedTeamsStats = JsonUtil.deserializeFromResourcePath(
-                        "files/expected/domain/transform/expected_teams_stats_without_error.json",
+                        "files/expected/domain/ptransform/expected_teams_stats_without_error.json",
                         referenceTeamStat)
                 .stream()
                 .map(JsonUtil::serialize)
@@ -83,7 +83,7 @@ public class TeamStatsTransformTest implements Serializable {
         val referenceTeamStatRaw = new TypeReference<List<TeamStatsRaw>>() {
         };
         final List<TeamStatsRaw> inputTeamsStatsRaw = JsonUtil.deserializeFromResourcePath(
-                "files/input/domain/transform/input_teams_stats_raw_with_one_error_one_good_output.json",
+                "files/input/domain/ptransform/input_teams_stats_raw_with_one_error_one_good_output.json",
                 referenceTeamStatRaw
         );
 
@@ -101,7 +101,7 @@ public class TeamStatsTransformTest implements Serializable {
         val referenceTeamStat = new TypeReference<List<TeamStats>>() {
         };
         final List<String> expectedTeamsStats = JsonUtil.deserializeFromResourcePath(
-                        "files/expected/domain/transform/expected_teams_stats_with_one_error_one_good_output.json",
+                        "files/expected/domain/ptransform/expected_teams_stats_with_one_error_one_good_output.json",
                         referenceTeamStat)
                 .stream()
                 .map(JsonUtil::serialize)

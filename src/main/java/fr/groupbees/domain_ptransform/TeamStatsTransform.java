@@ -1,4 +1,4 @@
-package fr.groupbees.domain_transform;
+package fr.groupbees.domain_ptransform;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import fr.groupbees.asgarde.CollectionComposer;
