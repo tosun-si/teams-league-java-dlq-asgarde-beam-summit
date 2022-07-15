@@ -3,6 +3,7 @@ package fr.groupbees.domain_ptransform;
 import com.fasterxml.jackson.core.type.TypeReference;
 import fr.groupbees.asgarde.CollectionComposer;
 import fr.groupbees.asgarde.Failure;
+import fr.groupbees.asgarde.transforms.MapElementFn;
 import fr.groupbees.asgarde.transforms.MapProcessContextFn;
 import fr.groupbees.domain.TeamStats;
 import fr.groupbees.domain.TeamStatsRaw;
@@ -35,7 +36,10 @@ public class TeamStatsTransform extends PTransform<PCollection<TeamStatsRaw>, Re
     public Result<PCollection<TeamStats>, Failure> expand(PCollection<TeamStatsRaw> input) {
         return CollectionComposer.of(input)
                 .apply("Validate fields", MapElements.into(of(TeamStatsRaw.class)).via(TeamStatsRaw::validateFields))
-                .apply("Compute team stats", MapElements.into(of(TeamStats.class)).via(TeamStats::computeTeamStats))
+                .apply("Compute team stats", MapElementFn
+                        .into(of(TeamStats.class))
+                        .via(TeamStats::computeTeamStats)
+                        .withStartBundleAction(() -> LOGGER.info("####################Start bundle compute stats")))
                 .apply("Add team slogan", MapProcessContextFn
                                 .from(TeamStats.class)
                                 .into(of(TeamStats.class))

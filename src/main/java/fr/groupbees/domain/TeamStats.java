@@ -1,6 +1,5 @@
 package fr.groupbees.domain;
 
-import com.google.common.collect.ImmutableMap;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,11 +12,6 @@ import java.util.*;
 @EqualsAndHashCode
 @ToString
 public class TeamStats implements Serializable {
-
-    private static final Map<String, String> TEAM_SLOGANS = ImmutableMap.of(
-            "PSG", "Paris est magique",
-            "Real", "Hala Madrid"
-    );
 
     private String teamName;
     private int teamScore;

@@ -40,7 +40,7 @@ public class TeamLeaguePipelineComposer {
 
         Result<PCollection<TeamStats>, Failure> resultTeamStats = pipeline
                 .apply("Read team stats", inMemoryIOConnector.read())
-                .apply("name", new TeamStatsTransform(slogansSideInput));
+                .apply("Team stats domain transform", new TeamStatsTransform(slogansSideInput));
 
         resultTeamStats
                 .output()

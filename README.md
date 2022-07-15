@@ -16,6 +16,8 @@ mvn compile exec:java \
   --gcpTempLocation=gs://mazlum_dev/dataflow/temp \
   --stagingLocation=gs://mazlum_dev/dataflow/staging \
   --serviceAccount=922164338802-compute@developer.gserviceaccount.com \
+  --inputJsonFile=gs://mazlum_dev/team_league/input/json/input_teams_stats_raw.json \
+  --inputFileSlogans=gs://mazlum_dev/team_league/input/json/input_team_slogans.json \
   --teamLeagueDataset=mazlum_test \
   --teamStatsTable=team_stat \
   --jobType=team_league_java_ingestion_job \
