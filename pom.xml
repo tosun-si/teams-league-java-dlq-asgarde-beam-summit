@@ -12,9 +12,9 @@
     <packaging>jar</packaging>
 
     <properties>
-        <beam.version>2.54.0</beam.version>
+        <beam.version>2.56.0</beam.version>
 
-        <asgarde.version>0.33.0</asgarde.version>
+        <asgarde.version>0.35.0-SNAPSHOT</asgarde.version>
 
         <bigquery.version>v2-rev20230812-2.0.0</bigquery.version>
         <google-api-client.version>2.0.0</google-api-client.version>
