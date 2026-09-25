@@ -12,36 +12,35 @@
     <packaging>jar</packaging>
 
     <properties>
-        <beam.version>2.57.0</beam.version>
+        <!-- Beam >= 2.74.0 requires Java 11+: the job is built and run with Java 17 (Dataflow picks the worker image
+             of the Java version launching the job). -->
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <asgarde.version>0.36.0</asgarde.version>
+        <beam.version>2.76.0</beam.version>
 
-        <bigquery.version>v2-rev20230812-2.0.0</bigquery.version>
-        <google-api-client.version>2.0.0</google-api-client.version>
-        <guava.version>32.1.2-jre</guava.version>
+        <asgarde.version>1.4.0</asgarde.version>
+
         <hamcrest.version>2.1</hamcrest.version>
         <jackson.version>2.14.1</jackson.version>
-        <joda.version>2.10.10</joda.version>
         <junit.version>4.13.1</junit.version>
         <kafka.version>2.4.1</kafka.version>
-        <libraries-bom.version>26.23.0</libraries-bom.version>
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
+        <maven-compiler-plugin.version>3.16.0</maven-compiler-plugin.version>
+        <maven-exec-plugin.version>3.6.4</maven-exec-plugin.version>
+        <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
+        <maven-shade-plugin.version>3.6.2</maven-shade-plugin.version>
         <mockito.version>3.7.7</mockito.version>
-        <pubsub.version>v1-rev20220904-2.0.0</pubsub.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <spark.version>3.2.2</spark.version>
         <hadoop.version>2.10.2</hadoop.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <nemo.version>0.1</nemo.version>
-        <flink.artifact.name>beam-runners-flink-1.16</flink.artifact.name>
+        <flink.artifact.name>beam-runners-flink-1.20</flink.artifact.name>
 
         <assertj.version>3.23.1</assertj.version>
         <json-unit-assertj.version>2.35.0</json-unit-assertj.version>
         <dagger.version>2.51</dagger.version>
-        <lombok.version>1.18.24</lombok.version>
+        <lombok.version>1.18.48</lombok.version>
         <open-csv.version>5.6</open-csv.version>
     </properties>
 
@@ -66,8 +65,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>com.google.dagger</groupId>
@@ -371,67 +368,10 @@
             <version>${asgarde.version}</version>
         </dependency>
 
-        <!-- Dependencies below this line are specific dependencies needed by the examples code. -->
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client</artifactId>
-            <version>${google-api-client.version}</version>
-            <exclusions>
-                <!-- Exclude an old version of guava that is being pulled
-                     in by a transitive dependency of google-api-client -->
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava-jdk5</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-bigquery</artifactId>
-            <version>${bigquery.version}</version>
-            <exclusions>
-                <!-- Exclude an old version of guava that is being pulled
-                     in by a transitive dependency of google-api-client -->
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava-jdk5</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client</artifactId>
-            <exclusions>
-                <!-- Exclude an old version of guava that is being pulled
-                     in by a transitive dependency of google-api-client -->
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava-jdk5</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-pubsub</artifactId>
-            <version>${pubsub.version}</version>
-            <exclusions>
-                <!-- Exclude an old version of guava that is being pulled
-                     in by a transitive dependency of google-api-client -->
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava-jdk5</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda.version}</version>
-        </dependency>
 
         <!-- Add slf4j API frontend binding with JUL backend -->
         <dependency>
@@ -519,16 +459,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Beam GCP BOM: the versions of the GCP libraries (BigQuery, Pub/Sub, gRPC, Guava...) compatible with this
+                 Beam version, instead of the generic GCP libraries-bom. -->
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>  <!-- "-jre" for Java 8 or higher -->
-            </dependency>
-            <!-- GCP libraries BOM sets the version for google http client -->
-            <dependency>
-                <groupId>com.google.cloud</groupId>
-                <artifactId>libraries-bom</artifactId>
-                <version>${libraries-bom.version}</version>
+                <groupId>org.apache.beam</groupId>
+                <artifactId>beam-sdks-java-google-cloud-platform-bom</artifactId>
+                <version>${beam.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
